@@ -1,0 +1,168 @@
+start-at-login = true
+
+after-login-command = []
+after-startup-command = []
+on-focused-monitor-changed = []
+
+# Normalizations. See: https://nikitabobko.github.io/AeroSpace/guide#normalization
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+
+# TODO: per monitor?
+# See: https://nikitabobko.github.io/AeroSpace/guide#layouts
+accordion-padding = 120 # The 'accordion-padding' specifies the size of accordion padding
+
+# Possible values: tiles|accordion
+default-root-container-layout = 'tiles'
+default-root-container-orientation = 'auto'
+
+# gestures++
+# drag window anyway and swipe like workspaces
+# aerospace workspace "$(aerospace list-workspaces --monitor mouse --visible)" && aerospace workspace next
+# aerospace workspace "$(aerospace list-workspaces --monitor mouse --visible)" && aerospace workspace
+
+[[on-window-detected]]
+if.app-id = 'com.apple.finder'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.FontBook'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.MobileSMS'
+run = 'layout floating'
+
+[key-mapping]
+    preset = 'qwerty'
+
+# TODO: per monitor
+# Gaps between windows (inner-*) and between monitor edges (outer-*).
+# Possible values:
+# - Constant:     gaps.outer.top = 8
+# - Per monitor:  gaps.outer.top = [{ monitor.main = 16 }, { monitor."some-pattern" = 32 }, 24]
+#                 In this example, 24 is a default value when there is no match.
+#                 Monitor pattern is the same as for 'workspace-to-monitor-force-assignment'.
+#                 See:
+#                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
+[gaps]
+    inner.horizontal = 15
+    inner.vertical   = 15
+    outer.left       = 20
+    outer.bottom     = 20
+    outer.top        = 20
+    outer.right      = 20
+
+# 'main' binding mode declaration
+# See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
+# 'main' binding mode must be always presented
+[mode.main.binding]
+    # All possible keys:
+    # - Letters.        a, b, c, ..., z
+    # - Numbers.        0, 1, 2, ..., 9
+    # - Keypad numbers. keypad0, keypad1, keypad2, ..., keypad9
+    # - F-keys.         f1, f2, ..., f20
+    # - Special keys.   minus, equal, period, comma, slash, backslash, quote, semicolon,
+    #                   backtick, leftSquareBracket, rightSquareBracket, space, enter, esc,
+    #                   backspace, tab
+    # - Arrows.         left, down, up, right
+
+    # All possible modifiers: cmd, alt, ctrl, shift
+
+    # All possible commands: https://nikitabobko.github.io/AeroSpace/commands
+
+    # See: https://nikitabobko.github.io/AeroSpace/commands#layout
+    alt-slash = 'layout tiles horizontal vertical'
+    alt-period = 'layout accordion horizontal'
+
+    # See: https://nikitabobko.github.io/AeroSpace/commands#focus
+    alt-h     = 'focus left'
+    alt-j     = 'focus down'
+    alt-k     = 'focus up'
+    alt-l     = 'focus right'
+
+    # See: https://nikitabobko.github.io/AeroSpace/commands#move
+    alt-shift-h     = 'move left'
+    alt-shift-j     = 'move down'
+    alt-shift-k     = 'move up'
+    alt-shift-l     = 'move right'
+
+    # See: https://nikitabobko.github.io/AeroSpace/commands#resize
+    alt-minus = 'resize smart -50'
+    alt-equal = 'resize smart +50'
+
+    # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
+    alt-1 = 'workspace 1'
+    alt-2 = 'workspace 2'
+    alt-3 = 'workspace 3'
+    alt-4 = 'workspace 4'
+    alt-5 = 'workspace 5'
+    alt-6 = 'workspace 6'
+    alt-7 = 'workspace 7'
+    alt-8 = 'workspace 8'
+    alt-q = 'workspace Q'
+    alt-w = 'workspace W'
+    alt-e = 'workspace E'
+    alt-r = 'workspace R'
+
+    # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
+    alt-shift-1 = 'move-node-to-workspace 1'
+    alt-shift-2 = 'move-node-to-workspace 2'
+    alt-shift-3 = 'move-node-to-workspace 3'
+    alt-shift-4 = 'move-node-to-workspace 4'
+    alt-shift-5 = 'move-node-to-workspace 5'
+    alt-shift-6 = 'move-node-to-workspace 6'
+    alt-shift-7 = 'move-node-to-workspace 7'
+    alt-shift-8 = 'move-node-to-workspace 8'
+    alt-shift-q = 'move-node-to-workspace Q'
+    alt-shift-w = 'move-node-to-workspace W'
+    alt-shift-e = 'move-node-to-workspace E'
+    alt-shift-r = 'move-node-to-workspace R'
+
+    # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
+    # alt-tab = 'workspace-back-and-forth'
+    # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
+    # alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+    alt-tab      = 'workspace next'
+    alt-ctrl-tab = 'workspace prev'
+
+    # See: https://nikitabobko.github.io/AeroSpace/commands#mode
+    alt-shift-semicolon = 'mode service'
+
+    # disable hide windows shortcuts
+    cmd-h = []
+    cmd-alt-h = []
+
+# 'service' binding mode declaration.
+# See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
+[mode.service.binding]
+    esc = ['reload-config', 'mode main']
+    r = ['flatten-workspace-tree', 'mode main'] # reset layout
+    f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout
+
+    # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
+    #s = ['layout sticky tiling', 'mode main']
+
+    alt-shift-h     = ['join-with left', 'mode main']
+    alt-shift-left  = ['join-with left', 'mode main']
+    alt-shift-j     = ['join-with down', 'mode main']
+    alt-shift-down  = ['join-with down', 'mode main']
+    alt-shift-k     = ['join-with up', 'mode main']
+    alt-shift-up    = ['join-with up', 'mode main']
+    alt-shift-l     = ['join-with right', 'mode main']
+    alt-shift-right = ['join-with right', 'mode main']
+
+[workspace-to-monitor-force-assignment]
+    '1' = [1, 'secondary', 'main']
+    '2' = [1, 'secondary', 'main']
+    '3' = [1, 'secondary', 'main']
+    '4' = [1, 'secondary', 'main']
+    '5' = [3, 'secondary', 'main']
+    '6' = [3, 'secondary', 'main']
+    '7' = [3, 'secondary', 'main']
+    '8' = [3, 'secondary', 'main']
+    'Q' = 'main'
+    'W' = 'main'
+    'E' = 'main'
+    'R' = 'main'
+
