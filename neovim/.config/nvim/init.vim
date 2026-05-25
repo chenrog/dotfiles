@@ -7,20 +7,12 @@
 
     set scrolljump=5 " If you hit bottom or top, jump 5
     set scrolloff=5 " Keep focus on middle of screen when possible
-
-    set clipboard+=unnamedplus " default register is clipboard
 " }
 
 
 
 " KEY MAPPINGS {
     let g:mapleader="\<space>"
-
-    " Scrolling/Line movement
-    nnoremap gj j
-    nnoremap gk k
-    nnoremap j gj
-    nnoremap k gk
 " }
 
    call plug#begin('~/.local/share/nvim/plugged')

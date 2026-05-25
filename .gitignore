@@ -1,0 +1,19 @@
+.DS_Store
+**/.DS_Store
+
+# Local editor and app state
+cursor/
+.cursor/
+.vscode/
+iterm/.config/iterm2/AppSupport
+raycast/.config/raycast/
+spicetify/.config/spicetify/
+
+# Runtime sockets and caches
+**/sockets/
+**/cache/
+**/log/
+
+# Credentials and local machine state
+**/hosts.yml
+**/*.local.*

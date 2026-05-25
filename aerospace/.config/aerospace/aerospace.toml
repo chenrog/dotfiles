@@ -1,7 +1,9 @@
 start-at-login = true
 
 after-login-command = []
-after-startup-command = []
+after-startup-command = [
+  'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=8.0 hidpi=on'
+]
 on-focused-monitor-changed = []
 
 # Normalizations. See: https://nikitabobko.github.io/AeroSpace/guide#normalization
@@ -10,7 +12,7 @@ enable-normalization-opposite-orientation-for-nested-containers = true
 
 # TODO: per monitor?
 # See: https://nikitabobko.github.io/AeroSpace/guide#layouts
-accordion-padding = 120 # The 'accordion-padding' specifies the size of accordion padding
+accordion-padding = 80 # The 'accordion-padding' specifies the size of accordion padding
 
 # Possible values: tiles|accordion
 default-root-container-layout = 'tiles'
@@ -20,6 +22,14 @@ default-root-container-orientation = 'auto'
 # drag window anyway and swipe like workspaces
 # aerospace workspace "$(aerospace list-workspaces --monitor mouse --visible)" && aerospace workspace next
 # aerospace workspace "$(aerospace list-workspaces --monitor mouse --visible)" && aerospace workspace
+
+[[on-window-detected]]
+if.app-id = 'com.1password.1password'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.docker.docker'
+run = 'layout floating'
 
 [[on-window-detected]]
 if.app-id = 'com.apple.finder'
@@ -46,12 +56,12 @@ run = 'layout floating'
 #                 See:
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
-    inner.horizontal = 15
-    inner.vertical   = 15
-    outer.left       = 20
-    outer.bottom     = 20
-    outer.top        = 20
-    outer.right      = 20
+    inner.horizontal = [{monitor."main"=20}, 18]
+    inner.vertical   = [{monitor."main"=20}, 18]
+    outer.left       = [{monitor."main"=20}, 20]
+    outer.bottom     = [{monitor."main"=20}, 20]
+    outer.top        = [{monitor."main"=20}, 20]
+    outer.right      = [{monitor."main"=20}, 20]
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -88,8 +98,10 @@ run = 'layout floating'
     alt-shift-l     = 'move right'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#resize
-    alt-minus = 'resize smart -50'
-    alt-equal = 'resize smart +50'
+    alt-minus       = 'resize smart -50'
+    alt-shift-minus = 'resize smart -200'
+    alt-equal       = 'resize smart +50'
+    alt-shift-equal = 'resize smart +200'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
     alt-1 = 'workspace 1'
@@ -139,7 +151,11 @@ run = 'layout floating'
     esc = ['reload-config', 'mode main']
     r = ['flatten-workspace-tree', 'mode main'] # reset layout
     f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout
-
+    c = [
+    	'layout tiling',
+	"exec-and-forget sleep 0.01 && aerospace layout floating",
+	'mode main'
+    ]
     # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
     #s = ['layout sticky tiling', 'mode main']
 

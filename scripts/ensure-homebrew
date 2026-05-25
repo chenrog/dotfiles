@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+set -eu
+
+script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+
+if "$script_dir/brew" --version >/dev/null 2>&1; then
+  exit 0
+fi
+
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+"$script_dir/brew" --version >/dev/null

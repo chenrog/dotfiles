@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+set -eu
+
+vim_plug_path="${XDG_DATA_HOME:-$HOME/.local/share}/nvim/site/autoload/plug.vim"
+
+if [ -f "$vim_plug_path" ]; then
+  echo "vim-plug already installed at $vim_plug_path"
+  exit 0
+fi
+
+curl -fLo "$vim_plug_path" --create-dirs \
+  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim

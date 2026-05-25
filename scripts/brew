@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+set -eu
+
+if command -v brew >/dev/null 2>&1; then
+  exec brew "$@"
+fi
+
+for brew_bin in /opt/homebrew/bin/brew /usr/local/bin/brew; do
+  if [ -x "$brew_bin" ]; then
+    exec "$brew_bin" "$@"
+  fi
+done
+
+echo "Homebrew is not installed. Run 'make homebrew' first." >&2
+exit 1
