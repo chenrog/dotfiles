@@ -1,0 +1,90 @@
+#!/usr/bin/env sh
+set -u
+
+repo_dir=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+catppuccin_submodule="iterm/.config/iterm2/themes/catppuccin"
+failures=0
+warnings=0
+
+run_check() {
+	desc=$1
+	shift
+
+	printf '%s... ' "$desc"
+	if output=$("$@" 2>&1); then
+		printf 'ok\n'
+	else
+		printf 'failed\n'
+		printf '%s\n' "$output" | sed 's/^/  /'
+		failures=$((failures + 1))
+	fi
+}
+
+warn_check() {
+	desc=$1
+	shift
+
+	printf '%s... ' "$desc"
+	if output=$("$@" 2>&1); then
+		printf 'ok\n'
+	else
+		printf 'warning\n'
+		printf '%s\n' "$output" | sed 's/^/  /'
+		warnings=$((warnings + 1))
+	fi
+}
+
+check_submodule() {
+	desc="Catppuccin iTerm submodule"
+	printf '%s... ' "$desc"
+
+	if ! output=$(git -C "$repo_dir" submodule status -- "$catppuccin_submodule" 2>&1); then
+		printf 'failed\n'
+		printf '%s\n' "$output" | sed 's/^/  /'
+		failures=$((failures + 1))
+		return
+	fi
+
+	case "$output" in
+		-*)
+			printf 'failed\n'
+			printf '  submodule is not initialized: %s\n' "$catppuccin_submodule"
+			failures=$((failures + 1))
+			;;
+		+*)
+			printf 'failed\n'
+			printf '  submodule checkout differs from the commit recorded by this repo: %s\n' "$catppuccin_submodule"
+			failures=$((failures + 1))
+			;;
+		U*)
+			printf 'failed\n'
+			printf '  submodule has merge conflicts: %s\n' "$catppuccin_submodule"
+			failures=$((failures + 1))
+			;;
+		*)
+			printf 'ok\n'
+			;;
+	esac
+}
+
+run_check "git available" command -v git
+run_check "stow available" command -v stow
+run_check "zsh available" command -v zsh
+run_check "Homebrew available" "$repo_dir/scripts/brew" --version
+warn_check "Brewfile dependencies installed" "$repo_dir/scripts/brew" bundle check --no-upgrade --verbose --file "$repo_dir/Brewfile"
+check_submodule
+run_check "stow simulation" make -C "$repo_dir" check
+run_check "zshrc syntax" zsh -n "$repo_dir/zsh/.zshrc"
+run_check "zprofile syntax" zsh -n "$repo_dir/zprofile/.zprofile"
+run_check "zshenv syntax" zsh -n "$repo_dir/zshenv/.zshenv"
+
+if [ "$failures" -ne 0 ]; then
+	printf 'doctor: %s check(s) failed\n' "$failures" >&2
+	exit 1
+fi
+
+if [ "$warnings" -ne 0 ]; then
+	printf 'doctor: ok with %s warning(s)\n' "$warnings"
+else
+	printf 'doctor: ok\n'
+fi

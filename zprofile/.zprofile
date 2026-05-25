@@ -1,0 +1,15 @@
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# Setting PATH for Python 3.12
+# The original version is saved in .zprofile.pysave
+PATH="/Library/Frameworks/Python.framework/Versions/3.12/bin:${PATH}"
+export PATH
+
+
+# Added by Toolbox App
+export PATH="$PATH:/Users/roger.chen/Library/Application Support/JetBrains/Toolbox/scripts"
+
+
+# Added by Obsidian
+export PATH="$PATH:/Applications/Obsidian.app/Contents/MacOS"
